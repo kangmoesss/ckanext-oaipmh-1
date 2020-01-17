@@ -24,13 +24,13 @@ from ckan import model
 
 from ckanext.harvest.model import HarvestJob, HarvestObject
 from ckanext.harvest.harvesters.base import HarvesterBase
-import ckanext.kata.utils
-import ckanext.kata.plugin
+#import ckanext.kata.utils
+#import ckanext.kata.plugin
 import fnmatch
 import re
 import ckanext.kata.kata_ldap as ld
-from ckanext.kata.utils import pid_to_name
-from ckanext.kata.utils import generate_pid
+#from ckanext.kata.utils import pid_to_name
+#from ckanext.kata.utils import generate_pid
 
 log = logging.getLogger(__name__)
 
