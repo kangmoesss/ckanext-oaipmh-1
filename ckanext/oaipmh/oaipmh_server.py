@@ -14,9 +14,8 @@ from ckan.lib.helpers import url_for
 from ckan.logic import get_action
 from ckan.model import Package, Session, Group, PackageRevision
 from ckanext.dcat.processors import RDFSerializer
-#from ckanext.kata import helpers
 import utils
-
+#from ckanext.kata import helpers
 log = logging.getLogger(__name__)
 
 rdfserializer = RDFSerializer()
