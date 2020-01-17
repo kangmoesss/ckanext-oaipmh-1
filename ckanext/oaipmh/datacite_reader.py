@@ -3,7 +3,7 @@
 import datetime
 import oaipmh.common
 
-from ckanext.kata.utils import get_package_id_by_pid, get_unique_package_id
+#from ckanext.kata.utils import get_package_id_by_pid, get_unique_package_id
 from ckanext.oaipmh.importcore import generic_xml_metadata_reader
 from lxml import etree
 from pylons import config
