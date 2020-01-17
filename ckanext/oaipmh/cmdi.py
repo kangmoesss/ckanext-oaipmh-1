@@ -4,7 +4,7 @@ import logging
 import urllib2
 from lxml import etree
 import oaipmh
-from ckanext.kata.utils import get_package_id_by_pid
+#from ckanext.kata.utils import get_package_id_by_pid
 from ckanext.oaipmh import importformats
 from ckanext.oaipmh.cmdi_reader import CmdiReader
 from ckanext.oaipmh.harvester import OAIPMHHarvester
