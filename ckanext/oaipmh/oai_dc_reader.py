@@ -12,9 +12,9 @@ import json
 
 from oaipmh import common as oc
 from ckanext.oaipmh import importcore
-import ckanext.kata.utils
+#import ckanext.kata.utils
 import utils
-from ckanext.kata.utils import label_list_yso, generate_pid, pid_to_name
+#from ckanext.kata.utils import label_list_yso, generate_pid, pid_to_name
 from urlparse import urlparse
 
 xml_reader = importcore.generic_xml_metadata_reader
