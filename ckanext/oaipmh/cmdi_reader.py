@@ -1,8 +1,8 @@
 from urlparse import urlparse
-from ckanext.kata.utils import pid_to_name
-from ckanext.kata.utils import get_unique_package_id
+#from ckanext.kata.utils import pid_to_name
+#from ckanext.kata.utils import get_unique_package_id
 from utils import convert_language
-from ckanext.kata.utils import get_package_id_by_pid
+#from ckanext.kata.utils import get_package_id_by_pid
 from ckanext.oaipmh.importcore import generic_xml_metadata_reader
 import oaipmh.common
 from functionally import first
