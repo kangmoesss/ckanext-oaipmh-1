@@ -28,7 +28,7 @@ from ckanext.harvest.harvesters.base import HarvesterBase
 #import ckanext.kata.plugin
 import fnmatch
 import re
-import ckanext.kata.kata_ldap as ld
+#import ckanext.kata.kata_ldap as ld
 #from ckanext.kata.utils import pid_to_name
 #from ckanext.kata.utils import generate_pid
 
