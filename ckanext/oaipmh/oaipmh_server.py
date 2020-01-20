@@ -5,6 +5,7 @@ import json
 import logging
 
 from oaipmh import common
+from oaipmh import helpers
 from oaipmh.common import ResumptionOAIPMH
 from oaipmh.error import IdDoesNotExistError
 from pylons import config
