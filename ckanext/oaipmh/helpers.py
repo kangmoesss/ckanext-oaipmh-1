@@ -19,7 +19,7 @@ from urlparse import urlparse
 
 import ckan.model as model
 # from ckan.model import Related, Package, User
-from ckan.common import g, h, c
+from ckan.common import g, c
 from ckan.logic import get_action, ValidationError
 # from ckanext.kata import settings, utils
 from ckan.lib.navl.dictization_functions import validate
