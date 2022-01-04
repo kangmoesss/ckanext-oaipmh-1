@@ -1,6 +1,6 @@
 # coding: utf-8
 # vi:et:ts=8:
-import httplib
+import http.client 
 
 import logging
 import json
