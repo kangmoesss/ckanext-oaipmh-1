@@ -7,7 +7,7 @@ import json
 from itertools import islice
 from lxml import etree
 import urllib.request,urllib.parse,urllib.error
-from pylons import config as c
+from ckan.plugins.toolkit import config as c
 from paste.deploy.converters import asbool
 
 import oaipmh.client
