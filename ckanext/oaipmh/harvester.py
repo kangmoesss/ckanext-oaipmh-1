@@ -8,12 +8,13 @@ from itertools import islice
 from lxml import etree
 import urllib.request,urllib.parse,urllib.error
 from ckan.plugins.toolkit import config as c
+import ckan.plugins.toolkit as toolkit
 from paste.deploy.converters import asbool
 
 import oaipmh.client
 import oaipmh.error
 from dateutil.parser import parse as dp
-from ckan.controllers.api import get_action
+
 from ckanext.oaipmh.oai_dc_reader import dc_metadata_reader
 
 import importformats
