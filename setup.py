@@ -18,9 +18,6 @@ setup(
     namespace_packages=['ckanext', 'ckanext.oaipmh'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=[
-        'ckanext-harvest'
-    ],
     entry_points="""
         [ckan.plugins]
         oaipmh=ckanext.oaipmh.plugin:OAIPMHPlugin
