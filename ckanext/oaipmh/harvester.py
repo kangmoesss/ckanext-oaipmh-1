@@ -6,7 +6,7 @@ import logging
 import json
 from itertools import islice
 from lxml import etree
-from urllib import urlopen urlerror
+import urllib.request,urllib.parse,urllib.error
 from pylons import config as c
 from paste.deploy.converters import asbool
 
