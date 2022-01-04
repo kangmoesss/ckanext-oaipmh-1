@@ -7,7 +7,7 @@ import bs4
 import lxml.etree
 import pointfree as pf
 from fn.uniform import zip, filter, filterfalse
-from functionally import first
+from first import first
 import json
 
 from oaipmh import common as oc
