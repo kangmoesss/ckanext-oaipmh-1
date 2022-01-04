@@ -6,7 +6,7 @@ import logging
 import json
 from itertools import islice
 from lxml import etree
-import urllib2
+from urllib import urlopen urlerror
 from pylons import config as c
 from paste.deploy.converters import asbool
 
@@ -487,9 +487,9 @@ class OAIPMHHarvester(HarvesterBase):
         '''
         try:
             log.debug('Requesting url {ur}'.format(ur=url))
-            f = urllib2.urlopen(url).read()
+            f = urllib.urlopen(url).read()
             return self.parse_xml(f, context, url)
-        except (urllib2.URLError, urllib2.HTTPError,):
+        except (urllib.urlerror, urllib.error.HTTPError,):
             log.debug('fetch_xml: Could not fetch from url {ur}!'.format(ur=url))
-        except httplib.BadStatusLine:
+        except http.client.BadStatusLine:
             log.debug('Bad HTTP response status line.')
