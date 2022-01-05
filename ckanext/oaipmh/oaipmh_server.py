@@ -15,7 +15,7 @@ from ckan.logic import get_action
 from ckan.model import Package, Session, Group, PackageRevision
 from ckanext.dcat.processors import RDFSerializer
 from ckanext.kata import helpers
-import utils
+from ckanext.oaipmh.utils import get_earliest_datestamp
 
 log = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class CKANServer(ResumptionOAIPMH):
             baseURL=config.get('ckan.site_url', None) + url_for(controller='ckanext.oaipmh.controller:OAIPMHController', action='index'),
             protocolVersion="2.0",
             adminEmails=['etsin@csc.fi'],
-            earliestDatestamp=utils.get_earliest_datestamp(),
+            earliestDatestamp=get_earliest_datestamp(),
             deletedRecord='no',
             granularity='YYYY-MM-DDThh:mm:ssZ',
             compression=['identity'])
