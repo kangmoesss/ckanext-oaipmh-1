@@ -12,9 +12,9 @@ import json
 
 from oaipmh import common as oc
 from ckanext.oaipmh import importcore
-import ckanext.kata.utils
+
 import utils
-from ckanext.kata.utils import label_list_yso, generate_pid, pid_to_name
+
 from urlparse import urlparse
 
 xml_reader = importcore.generic_xml_metadata_reader
@@ -28,6 +28,64 @@ NS = {
 
 # TODO: Change this file to class structure to allow harvester to set values also with OAI-PMH verb 'Identify'.
 
+def label_list_yso(tag_url):
+    """
+    Takes tag keyword URL and fetches the labels that link to it.
+    :returns: the labels
+    """
+
+    _tagspaces = {
+        'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'yso-meta': 'http://www.yso.fi/onto/yso-meta/2007-03-02/',
+        'rdfs': "http://www.w3.org/2000/01/rdf-schema#",
+        'ysa': "http://www.yso.fi/onto/ysa/",
+        'skos': "http://www.w3.org/2004/02/skos/core#",
+        'om': "http://www.yso.fi/onto/yso-peilaus/2007-03-02/",
+        'dc': "http://purl.org/dc/elements/1.1/",
+        'allars': "http://www.yso.fi/onto/allars/",
+        'daml': "http://www.daml.org/2001/03/daml+oil#",
+        'yso-kehitys': "http://www.yso.fi/onto/yso-kehitys/",
+        'owl': "http://www.w3.org/2002/07/owl#",
+        'xsd': "http://www.w3.org/2001/XMLSchema#",
+        'yso': "http://www.yso.fi/onto/yso/",
+    }
+
+    labels = []
+    if not tag_url.endswith("?rdf=xml"):
+        tag_url += "?rdf=xml" # Small necessary bit.
+    request = urllib2.Request(tag_url, headers={"Accept": "application/rdf+xml"})
+    try:
+        contents = urllib2.urlopen(request).read()
+    except (socket.error, urllib2.HTTPError, urllib2.URLError,):
+        log.debug("Failed to read tag XML.")
+        return []
+    try:
+        xml = etree.XML(contents)
+    except etree.XMLSyntaxError:
+        log.debug("Tag XMl syntax error.")
+        return []
+    for descr in xml.xpath('/rdf:RDF/rdf:Description', namespaces=_tagspaces):
+        for tag in ('yso-meta:prefLabel', 'rdfs:label', 'yso-meta:altLabel',):
+            nodes = descr.xpath('./%s' % tag, namespaces=_tagspaces)
+            for node in nodes:
+                text = node.text.strip() if node.text else ''
+                if text:
+                    labels.append(text)
+
+    for node in xml.xpath('/rdf:RDF/skos:Concept/skos:prefLabel', namespaces=_tagspaces):
+        text = node.text.strip() if node.text else None
+        if text:
+            labels.append(text)
+
+    return labels
+
+def generate_pid():
+    """
+    Generate a permanent Kata identifier
+    """
+    import datetime
+    return "urn:nbn:fi:csc-kata%s" % datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+
 
 def dc_metadata_reader(harvest_type):
     """ Get correct reader for given harvest_type. Currently supports 'ida' or 'default'. """
@@ -37,6 +95,12 @@ def dc_metadata_reader(harvest_type):
         return reader.read()
     return method
 
+def pid_to_name(string):
+    '''
+    Wrap re.sub to convert a PID to package.name.
+    '''
+    if string:
+        return re.sub(*settings.PID_TO_NAME_REGEXES, string=string)
 
 class DcMetadataReader():
     def __init__(self, xml):
