@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 from ckanext.oaipmh.importcore import generic_xml_metadata_reader
 import oaipmh.common
 from first import first
-from pylons import config
+from ckan.plugins.toolkit import config
 import json
 
 import ckan.plugins.toolkit as toolkit
