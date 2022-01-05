@@ -1,14 +1,58 @@
-from urlparse import urlparse
-from ckanext.kata.utils import pid_to_name
-from ckanext.kata.utils import get_unique_package_id
+from urllib.parse import urlparse
+
 from utils import convert_language
-from ckanext.kata.utils import get_package_id_by_pid
+
 from ckanext.oaipmh.importcore import generic_xml_metadata_reader
 import oaipmh.common
 from functionally import first
 from pylons import config
 import json
 
+import ckan.plugins.toolkit as toolkit
+
+
+def pid_to_name(string):
+    '''
+    Wrap re.sub to convert a PID to package.name.
+    '''
+    if string:
+        return re.sub(*settings.PID_TO_NAME_REGEXES, string=string)
+    
+def get_unique_package_id():
+    '''
+    Create new package id by generating a new one. Check that the generated id does not exist already.
+    This method should always return a previously unexisting package id. If this method returns None,
+    then something is wrong.
+    '''
+
+    new_id_exists = True
+    i=0
+    while new_id_exists and i < 10:
+        new_id = unicode(generate_pid())
+        existing_id_query = model.Session.query(model.Package)\
+                        .filter(model.Package.id == new_id)
+        if existing_id_query.first():
+            i += 1
+            continue
+        return new_id
+    return None
+
+def get_package_id_by_pid(pid, pid_type):
+    """ Find pid by id and type.
+    :param pid: id of the pid
+    :param pid_type: type of the pid (primary, relation)
+    :return: id of the package
+    """
+    query = select(['key', 'package_id']).where(and_(model.PackageExtra.value == pid, model.PackageExtra.key.like('pids_%_id'),
+                                                     model.PackageExtra.state == 'active'))
+
+    for key, package_id in [('pids_%s_type' % key.split('_')[1], package_id) for key, package_id in Session.execute(query)]:
+        query = select(['package_id']).where(and_(model.PackageExtra.value == pid_type, model.PackageExtra.key == key,
+                                                  model.PackageExtra.state == 'active', model.PackageExtra.package_id == package_id))
+        for package_id, in Session.execute(query):
+            return package_id
+
+    return None
 
 class CmdiReaderException(Exception):
     """ Reader exception is thrown on unexpected data or error. """
