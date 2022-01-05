@@ -5,7 +5,6 @@ import oaipmh.common
 
 from ckanext.oaipmh.importcore import generic_xml_metadata_reader
 from lxml import etree
-from pylons import config
 
 from ckan.plugins.toolkit import config
 import ckan.plugins.toolkit as toolkit
