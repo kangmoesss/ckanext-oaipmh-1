@@ -1,6 +1,7 @@
 # coding=utf-8
 import logging
-import re
+from re import unicode
+import re 
 from itertools import tee, chain
 
 import bs4
