@@ -7,7 +7,7 @@ import logging
 from oaipmh import common
 from oaipmh.common import ResumptionOAIPMH
 from oaipmh.error import IdDoesNotExistError
-from pylons import config
+import ckan.plugins.toolkit as toolkit
 from sqlalchemy import between
 
 from ckan.lib.helpers import url_for
