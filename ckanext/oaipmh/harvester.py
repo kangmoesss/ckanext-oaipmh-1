@@ -36,6 +36,47 @@ import oaipmh.metadata as om
 
 log = logging.getLogger(__name__)
 
+def get_package_id_by_primary_pid(data_dict):
+    '''
+    Try if the provided primary PID matches exactly one dataset.
+    THIS METHOD WAS PREVIOUSLY GET_PACKAGE_ID_BY_DATA_PIDS, is the below correct, or should relation pids also be used?
+    :param data_dict:
+    :return: Package id or None if not found.
+    '''
+    primary_pid = get_primary_pid(data_dict)
+    if not primary_pid:
+        return None
+
+    pid_list = [primary_pid]
+
+    # Get package ID's with matching PIDS
+    query = Session.query(model.PackageExtra.package_id.distinct()).\
+        filter(model.PackageExtra.value.in_(pid_list))
+    pkg_ids = query.all()
+    if len(pkg_ids) != 1:
+        return None              # Nothing to do if we get many or zero datasets
+
+    # Get extras with the received package ID's
+    query = select(['key', 'value', 'state']).where(
+        and_(model.PackageExtra.package_id.in_(pkg_ids), model.PackageExtra.key.like('pids_%')))
+
+    extras = Session.execute(query)
+
+    # Dictize the results
+    extras = model_dictize.extras_list_dictize(extras, {'model': PackageExtra})
+
+    # Check that matching PIDS are type 'primary'.
+    for extra in extras:
+        key = extra['key'].split('_')   # eg. ['pids', '0', 'id']
+
+        if key[2] == 'id' and extra['value'] in pid_list:
+            type_key = '_'.join(key[:2] + ['type'])
+
+            if not filter(lambda x: x['key'] == type_key and (x['value'] == 'primary'), extras):
+                return None      # Found a hit with wrong type of PID
+
+    return pkg_ids[0]    # No problems found, so use this
+
 def pid_to_name(string):
     '''
     Wrap re.sub to convert a PID to package.name.
@@ -430,7 +471,7 @@ class OAIPMHHarvester(HarvesterBase):
         package_dict['xpaths'] = content
 
         # If package exists use old PID, otherwise create new
-        pkg_id = ckanext.kata.utils.get_package_id_by_primary_pid(package_dict)
+        pkg_id = get_package_id_by_primary_pid(package_dict)
         pkg = Session.query(Package).filter(Package.id == pkg_id).first() if pkg_id else None
         log.debug('Package: "{pkg}"'.format(pkg=pkg))
 
