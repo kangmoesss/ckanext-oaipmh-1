@@ -1,7 +1,7 @@
 # coding: utf-8
 # vi:et:ts=8:
 
-import cStringIO
+from io import StringIO
 
 import oaipmh.common
 import lxml.etree
@@ -145,7 +145,7 @@ def generic_rdf_metadata_reader(xml_element):
     # this is kinda stupid, but by far the easiest way:
     # rdflib uses xml.sax so it doesn't understand etree,
     # so text is the only common language spoken by lxml and rdflib
-    f = cStringIO.StringIO(etree.tostring(e, xml_declaration=True, encoding='utf-8'))
+    f = StringIO(etree.tostring(e, xml_declaration=True, encoding='utf-8'))
     g.parse(f, format='xml')  # publicID could be the metadata source URL
     # end stupid
 
