@@ -25,16 +25,45 @@ from ckan import model
 
 from ckanext.harvest.model import HarvestJob, HarvestObject
 from ckanext.harvest.harvesters.base import HarvesterBase
-import ckanext.kata.utils
-import ckanext.kata.plugin
+
+from iso639 import languages
+
 import fnmatch
 import re
-import ckanext.kata.kata_ldap as ld
-from ckanext.kata.utils import pid_to_name
-from ckanext.kata.utils import generate_pid
+
+import oaipmh.metadata as om
 
 log = logging.getLogger(__name__)
 
+def pid_to_name(string):
+    '''
+    Wrap re.sub to convert a PID to package.name.
+    '''
+    if string:
+        return re.sub(*settings.PID_TO_NAME_REGEXES, string=string)
+
+def generate_pid():
+    """
+    Generate a permanent Kata identifier
+    """
+    import datetime
+    return "urn:nbn:fi:csc-kata%s" % datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+
+def create_metadata_registry(harvest_type=None, service_url=None):
+    '''Return new metadata registry with all common metadata readers
+    The readers currently implemented are for metadataPrefixes
+    oai_dc, nrd, rdf and xml.
+    :returns: metadata registry instance
+    :rtype: oaipmh.metadata.MetadataRegistry
+    '''
+    registry = om.MetadataRegistry()
+    registry.registerReader('oai_dc', dc_metadata_reader(harvest_type or 'default'))
+    registry.registerReader('cmdi0571', CmdiReader(service_url))
+    registry.registerReader('oai_datacite3', DataCiteReader())
+    registry.registerReader('nrd', nrd_metadata_reader)
+    registry.registerReader('rdf', rdf_reader)
+    registry.registerReader('xml', xml_reader)
+    return registry
 
 class OAIPMHHarvester(HarvesterBase):
     '''
