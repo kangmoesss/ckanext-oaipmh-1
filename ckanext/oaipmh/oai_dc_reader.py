@@ -15,7 +15,7 @@ from iso639 import languages
 from oaipmh import common as oc
 from ckanext.oaipmh import importcore
 
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 xml_reader = importcore.generic_xml_metadata_reader
 log = logging.getLogger(__name__)
