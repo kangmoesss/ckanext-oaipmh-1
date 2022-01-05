@@ -10,10 +10,10 @@ from fn.uniform import zip, filter, filterfalse
 from first import first
 import json
 
+from iso639 import languages
+
 from oaipmh import common as oc
 from ckanext.oaipmh import importcore
-
-import utils
 
 from urlparse import urlparse
 
@@ -27,6 +27,24 @@ NS = {
 }
 
 # TODO: Change this file to class structure to allow harvester to set values also with OAI-PMH verb 'Identify'.
+
+def convert_language(lang):
+    '''
+    Convert alpha2 language (eg. 'en') to terminology language (eg. 'eng')
+    '''
+
+    if not lang:
+        return "und"
+
+    try:
+        lang_object = languages.get(part1=lang)
+        return lang_object.terminology
+    except KeyError as ke:
+        try:
+            lang_object = languages.get(part2b=lang)
+            return lang_object.terminology
+        except KeyError as ke:
+            return ''
 
 def label_list_yso(tag_url):
     """
