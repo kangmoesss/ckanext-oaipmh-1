@@ -27,6 +27,8 @@ NS = {
     'cscida': "http://etsin.avointiede.fi/cscida/",
 }
 
+PID_TO_NAME_REGEXES = [r'[^A-Za-z0-9]', r'-']
+
 # TODO: Change this file to class structure to allow harvester to set values also with OAI-PMH verb 'Identify'.
 
 def convert_language(lang):
@@ -119,7 +121,7 @@ def pid_to_name(string):
     Wrap re.sub to convert a PID to package.name.
     '''
     if string:
-        return re.sub(*settings.PID_TO_NAME_REGEXES, string=string)
+        return re.sub(PID_TO_NAME_REGEXES, string=string)
 
 class DcMetadataReader():
     def __init__(self, xml):
