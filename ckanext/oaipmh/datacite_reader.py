@@ -41,7 +41,7 @@ def get_unique_package_id():
     new_id_exists = True
     i=0
     while new_id_exists and i < 10:
-        new_id = unicode(generate_pid())
+        new_id = str(generate_pid())
         existing_id_query = model.Session.query(model.Package)\
                         .filter(model.Package.id == new_id)
         if existing_id_query.first():
