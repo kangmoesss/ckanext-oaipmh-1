@@ -156,7 +156,7 @@ def generic_rdf_metadata_reader(xml_element):
         path = prefix.split('/')
         if len(path) > 2 and is_reverse_relation(path[-1], path[-2]):
             return
-        result[prefix] = unicode(node)
+        result[prefix] = str(node)
         if node in visited:
             return
         visited.add(node)
