@@ -1,7 +1,5 @@
 from urllib.parse import urlparse
 
-from utils import convert_language
-
 from ckanext.oaipmh.importcore import generic_xml_metadata_reader
 import oaipmh.common
 from functionally import first
@@ -10,6 +8,25 @@ import json
 
 import ckan.plugins.toolkit as toolkit
 
+from iso639 import languages
+
+def convert_language(lang):
+    '''
+    Convert alpha2 language (eg. 'en') to terminology language (eg. 'eng')
+    '''
+
+    if not lang:
+        return "und"
+
+    try:
+        lang_object = languages.get(part1=lang)
+        return lang_object.terminology
+    except KeyError as ke:
+        try:
+            lang_object = languages.get(part2b=lang)
+            return lang_object.terminology
+        except KeyError as ke:
+            return ''
 
 def pid_to_name(string):
     '''
