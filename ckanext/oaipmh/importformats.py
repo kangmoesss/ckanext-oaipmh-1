@@ -11,7 +11,7 @@ from ckanext.oaipmh.cmdi_reader import CmdiReader
 from ckanext.oaipmh.datacite_reader import DataCiteReader
 from ckanext.oaipmh.oai_dc_reader import dc_metadata_reader
 
-import importcore
+from ckanext.oaipmh.importcore import importcore
 
 xml_reader = importcore.generic_xml_metadata_reader
 rdf_reader = importcore.generic_rdf_metadata_reader
