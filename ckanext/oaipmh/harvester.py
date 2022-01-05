@@ -17,6 +17,7 @@ from dateutil.parser import parse as dp
 
 from ckanext.oaipmh.oai_dc_reader import dc_metadata_reader
 from ckanext.oaipmh.cmdi_reader import CmdiReader
+from ckanext.oaipmh.datacite_reader import DataCiteReader
 
 from ckan.model import Session, Package
 from ckan.logic import NotFound, NotAuthorized, ValidationError
