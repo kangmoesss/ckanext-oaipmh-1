@@ -1,6 +1,6 @@
 # coding=utf-8
 import logging
-from re import unicode
+
 import re 
 from itertools import tee, chain
 
@@ -109,7 +109,7 @@ def generate_pid():
 def dc_metadata_reader(harvest_type):
     """ Get correct reader for given harvest_type. Currently supports 'ida' or 'default'. """
     def method(xml):
-        reader_class = {u'ida': IdaDcMetadataReader}.get(unicode(harvest_type).lower(), DefaultDcMetadataReader)
+        reader_class = {u'ida': IdaDcMetadataReader}.get(str(harvest_type).lower(), DefaultDcMetadataReader)
         reader = reader_class(xml)
         return reader.read()
     return method
@@ -313,7 +313,7 @@ class DcMetadataReader():
 class IdaDcMetadataReader(DcMetadataReader):
     def _skip_note(self, note):
         """ Skip directo_download descriptions """
-        return not note or u'direct_download' in unicode(note)
+        return not note or u'direct_download' in str(note)
 
     def _get_maintainer_stuff(self):
         """ IDA does not provide valid url for maintainer. Instead it might gives something like 'person'. This omits the URL data. """
@@ -581,7 +581,7 @@ def _get_provider(tag_tree):
     provider = None
     try:
         for ident in tag_tree('identifier', recursive=True):
-            if u'helda.helsinki.fi' in unicode(ident.contents[0]):
+            if u'helda.helsinki.fi' in str(ident.contents[0]):
                 provider = u'http://helda.helsinki.fi/oai/request'
                 break
     except AttributeError:
@@ -590,7 +590,7 @@ def _get_provider(tag_tree):
     if not provider:
         try:
             for ident in tag_tree('identifier', recursive=True):
-                if unicode(ident.contents[0]).startswith(u'urn:nbn:fi:csc-ida'):
+                if str(ident.contents[0]).startswith(u'urn:nbn:fi:csc-ida'):
                     provider = 'ida'
                     break
 
