@@ -198,7 +198,7 @@ class DcMetadataReader():
 
         transl_json = {}
         for title in self.dc('title', recursive=False):
-            lang = utils.convert_language(title.get('xml:lang', '').strip())
+            lang = convert_language(title.get('xml:lang', '').strip())
             transl_json[lang] = title.string.strip()
 
         title = json.dumps(transl_json)
