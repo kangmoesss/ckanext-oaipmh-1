@@ -17,8 +17,6 @@ from dateutil.parser import parse as dp
 
 from ckanext.oaipmh.oai_dc_reader import dc_metadata_reader
 
-import importformats
-
 from ckan.model import Session, Package
 from ckan.logic import NotFound, NotAuthorized, ValidationError
 from ckan import model
@@ -101,7 +99,7 @@ class OAIPMHHarvester(HarvesterBase):
 
     def metadata_registry(self, config, harvest_job):
         harvest_type = config.get('type', 'default')
-        return importformats.create_metadata_registry(harvest_type, harvest_job.source.url)
+        return create_metadata_registry(harvest_type, harvest_job.source.url)
 
     def info(self):
         '''
