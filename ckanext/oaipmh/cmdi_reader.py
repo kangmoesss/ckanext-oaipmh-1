@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 
 from ckanext.oaipmh.importcore import generic_xml_metadata_reader
 import oaipmh.common
-from functionally import first
+from first import first
 from pylons import config
 import json
 
