@@ -82,7 +82,7 @@ def pid_to_name(string):
     Wrap re.sub to convert a PID to package.name.
     '''
     if string:
-        return re.sub(*settings.PID_TO_NAME_REGEXES, string=string)
+        return re.sub(r'[^A-Za-z0-9]', r'-', string=string)
 
 def generate_pid():
     """
